@@ -1,13 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Pixelify+Sans:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div id="app"></div>
+    <div id="start-screen-wrapper">
+      <div id="start-screen">
+        <button id="start-button">start</button>
+        <p>use WASD/↑←↓→ to move</p>
+      </div>
+    </div>
+    <button id="day-night-toggle">Day/Night</button>
+    <div id="experience">
+      <canvas id="experience-canvas"></canvas>
+    </div>
+    <div class="modal hidden">
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <h1 class="modal-title">Project One</h1>
+          <button class="modal-exit-button">exit</button>
+        </div>
+        <div class="modal-content">
+          <div class="modal-content-wrapper">
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="modal-project-visit-button"
+              >View Project</a
+            >
+            <div class="modal-project-description">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
+              ipsam dolor est minus eveniet, ex ratione maiores saepe temporibus
+              officiis aliquam, cupiditate suscipit sequi placeat dignissimos.
+              Soluta ratione quo laudantium. Consectetur voluptatum beatae nisi
+              dolores consequatur harum corporis temporibus qui, fugiat ducimus
+              sed quasi ab adipisci sunt et sit a alias perspiciatis quam vitae
+              nostrum at eveniet dolorem vero. Aperiam! Sapiente laborum
+              mollitia aspernatur placeat saepe eos consectetur eligendi
+              veritatis, voluptate possimus sunt excepturi ab ratione modi
+              voluptas reiciendis nostrum soluta debitis at id. Esse qui unde
+              voluptate animi sapiente? Praesentium qui exercitationem, corrupti
+              saepe atque enim tempora quis ipsa non distinctio doloribus, iste
+              ab libero! Eveniet, aliquid qui, quo neque cumque nostrum omnis
+              accusantium consectetur placeat expedita provident doloremque?
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
