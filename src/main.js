@@ -54,36 +54,45 @@ renderer.toneMappingExposure = 2;
 
 const modalContent = {
   Welcome_Bill: {
-    title: "project One",
-    content: "this is project one. hello world",
+    title: "Welcome!",
+    content:
+      "Hello and welcome! I'm Rayan, and you've just stepped into my interactive 3D portfolio. Dive in and explore the projects and designs I've crafted with passion using Three.js and Blender. ps: if you missed it, you can move with WASD or your Arrow Keys",
   },
   Thanks_Bill: {
-    title: "project One",
-    content: "this is project one. hello world",
+    title: "Thank You!",
+    content:
+      "Thank you so much for visiting my portfolio! Creating this experience took about a week of dedication, learning, and creativity. I hope you enjoy exploring it as much as I enjoyed building it.",
   },
   Project_Bill1: {
-    title: "project One",
-    content: "this is project one. hello world",
+    title: "Restaurant Website Project",
+    content:
+      "This project was my first real-world web development challenge: designing and coding a restaurant website as a training exercise after completing my UI/UX course. It was a delicious learning experience!",
   },
   Project_Bill3001: {
     title: "3D Portfolio Project",
-    content: "this is 3D Portfolio Project",
+    content:
+      "You're looking at it right now! This 3D portfolio is my most ambitious project so far. I modeled every element in Blender and brought it all to life with Three.js. Every detail you see is a result of countless hours of creativity and problem-solving.",
   },
   Project_Bill3: {
-    title: "project One",
-    content: "this is project one. hello world",
+    title: "Solar System Simulation",
+    content:
+      "To really get stared with Three.js, I built a dynamic solar system simulation. This project helped me understand 3D graphics, animation, and the wonders of our universe—all while having fun coding planets and orbits!",
   },
   Project_Bill2: {
-    title: "project One",
-    content: "this is project one. hello world",
+    title: "IT-Project: Clicker Game",
+    content:
+      "Created as a graduation class project, this game features our politics teacher as the main character in a Cookie Clicker-inspired adventure. I handled the design in Figma, while the logic was implemented in GameMaker. It was a blast collaborating and bringing this rather funny idea to life!",
+    link: "https://gx.games/de/games/3jdbmc/schubishooter/",
   },
   Design_Bill1: {
-    title: "project One",
-    content: "this is project one. hello world",
+    title: "Web Design Training",
+    content:
+      "This project marks the beginning of my design journey. As one of my very first web designs, it taught me the fundamentals of layout, color, and user experience.",
   },
   Design_Bill2: {
-    title: "project One",
-    content: "this is project one. hello world",
+    title: "Tracking App Design",
+    content:
+      "During my UI/UX learning journey, I created this tracking app design with a focus on real-life usability and aesthetics. It’s a showcase of my growth in designing practical, user-friendly interfaces.",
     link: "keks.com",
   },
 };
