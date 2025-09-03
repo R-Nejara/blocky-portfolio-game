@@ -17,11 +17,11 @@ const sizes = {
 };
 
 // Physics
-const GRAVITY = 10;
+const GRAVITY = 40;
 const CAPSULE_RADIUS = 0.35;
 const CAPSULE_HEIGHT = 1;
-const JUMP_HEIGHT = 5;
-const MOVE_SPEED = 2;
+const JUMP_HEIGHT = 6;
+const MOVE_SPEED = 4;
 
 let character = {
   instance: null,
@@ -142,7 +142,8 @@ const intersectObjectsNames = [
 
 const loader = new GLTFLoader();
 loader.load(
-  "../glbFile/Portfolio.glb",
+  "/glbFile/Portfolio.glb",
+
   function (glb) {
     glb.scene.traverse((child) => {
       if (intersectObjectsNames.includes(child.name)) {
@@ -206,7 +207,6 @@ const toggleDayNight = () => {
   const targetColor = sun.isDay
     ? new THREE.Color("darkorange")
     : new THREE.Color(0xffffff);
-  console.log(targetColor);
   gsap.to(sun.color, {
     r: targetColor.r,
     g: targetColor.g,
@@ -221,7 +221,6 @@ const toggleDayNight = () => {
 const onDayNightButtonClick = () => {
   toggleDayNight();
 };
-console.log(dayNightButton);
 
 // const helper = new THREE.DirectionalLightHelper(sun, 5);
 // scene.add(helper);
@@ -306,18 +305,77 @@ function onClick() {
   }
 }
 
-function updatePlayer() {
+// --- Movement: Use keysPressed for smooth, framerate-independent movement ---
+const keysPressed = {};
+
+function onKeyDown(event) {
+  keysPressed[event.key.toLowerCase()] = true;
+  if (event.key.toLowerCase() === "0") {
+    respawnCharacter();
+  }
+}
+function onKeyUp(event) {
+  keysPressed[event.key.toLowerCase()] = false;
+}
+window.addEventListener("keydown", onKeyDown);
+window.addEventListener("keyup", onKeyUp);
+
+const startButton = document.getElementById("start-button");
+const startWrapper = document.getElementById("start-screen-wrapper");
+const hideStartScreen = () => {
+  startWrapper.classList.add("hidden");
+};
+
+dayNightButton.addEventListener("click", onDayNightButtonClick);
+modalExitButton.addEventListener("click", hideModal);
+startButton.addEventListener("click", hideStartScreen);
+window.addEventListener("resize", onResize);
+window.addEventListener("click", onClick);
+window.addEventListener("pointermove", onPointerMove);
+
+// --- Framerate-independent timing ---
+let lastTime = performance.now();
+
+function updatePlayer(deltaTime) {
   if (!character.instance) return;
 
   if (character.instance.position.y < -20) {
     respawnCharacter();
   }
 
+  // Movement logic (runs every frame, framerate-independent)
+  let moved = false;
+  if ((keysPressed["w"] || keysPressed["arrowup"]) && playerOnFloor) {
+    playerVelocity.x -= MOVE_SPEED;
+    targetRotation = Math.PI / 2;
+    playerVelocity.y = JUMP_HEIGHT;
+    moved = true;
+  }
+  if ((keysPressed["s"] || keysPressed["arrowdown"]) && playerOnFloor) {
+    playerVelocity.x += MOVE_SPEED;
+    targetRotation = -(Math.PI / 2);
+    playerVelocity.y = JUMP_HEIGHT;
+    moved = true;
+  }
+  if ((keysPressed["a"] || keysPressed["arrowleft"]) && playerOnFloor) {
+    playerVelocity.z += MOVE_SPEED;
+    targetRotation = 0;
+    playerVelocity.y = JUMP_HEIGHT;
+    moved = true;
+  }
+  if ((keysPressed["d"] || keysPressed["arrowright"]) && playerOnFloor) {
+    playerVelocity.z -= MOVE_SPEED;
+    targetRotation = -Math.PI;
+    playerVelocity.y = JUMP_HEIGHT;
+    moved = true;
+  }
+  character.isMoving = moved;
+
   if (!playerOnFloor) {
-    playerVelocity.y -= GRAVITY * 0.02;
+    playerVelocity.y -= GRAVITY * deltaTime;
   }
 
-  playerCollider.translate(playerVelocity.clone().multiplyScalar(0.03));
+  playerCollider.translate(playerVelocity.clone().multiplyScalar(deltaTime));
 
   playerCollisions();
 
@@ -338,60 +396,12 @@ function updatePlayer() {
   );
 }
 
-function onKeyDown(event) {
-  if (event.key.toLowerCase() === "0") {
-    respawnCharacter();
-    return;
-  }
-
-  if (character.isMoving) return;
-
-  switch (event.key.toLowerCase()) {
-    case "w":
-    case "arrowup":
-      playerVelocity.x -= MOVE_SPEED;
-      targetRotation = Math.PI / 2;
-      break;
-    case "s":
-    case "arrowdown":
-      playerVelocity.x += MOVE_SPEED;
-      targetRotation = -(Math.PI / 2);
-      break;
-    case "a":
-    case "arrowleft":
-      playerVelocity.z += MOVE_SPEED;
-      targetRotation = 0;
-
-      break;
-    case "d":
-    case "arrowright":
-      playerVelocity.z -= MOVE_SPEED;
-      targetRotation = -Math.PI;
-      break;
-    default:
-      return;
-  }
-  playerVelocity.y = JUMP_HEIGHT;
-  character.isMoving = true;
-}
-const startButton = document.getElementById("start-button");
-const startWrapper = document.getElementById("start-screen-wrapper");
-const hideStartScreen = () => {
-  startWrapper.classList.add("hidden");
-};
-
-dayNightButton.addEventListener("click", onDayNightButtonClick);
-modalExitButton.addEventListener("click", hideModal);
-startButton.addEventListener("click", hideStartScreen);
-window.addEventListener("resize", onResize);
-window.addEventListener("click", onClick);
-window.addEventListener("pointermove", onPointerMove);
-window.addEventListener("keydown", onKeyDown);
-
 function animate() {
-  // controls.update();
-  updatePlayer();
-  // console.log(camera.position);
+  const now = performance.now();
+  const deltaTime = Math.min((now - lastTime) / 1000, 0.1); // seconds, max 0.1s for safety
+  lastTime = now;
+
+  updatePlayer(deltaTime);
 
   if (character.instance) {
     const targetCameraPosition = new THREE.Vector3(
@@ -407,10 +417,8 @@ function animate() {
     );
   }
 
-  // update the picking ray with the camera and pointer position
   raycaster.setFromCamera(pointer, camera);
 
-  // calculate objects intersecting the picking ray
   const intersects = raycaster.intersectObjects(intersectObjects);
 
   if (intersects.length > 0) {
